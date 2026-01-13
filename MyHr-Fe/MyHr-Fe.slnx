@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="MyHr-Fe/myhr-fe.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+</Solution>
