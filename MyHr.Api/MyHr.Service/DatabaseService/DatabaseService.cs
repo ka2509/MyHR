@@ -7,7 +7,7 @@ namespace MyHr.Service.DatabaseService
         private static readonly string _defaultConnectionString = new SqlConnectionStringBuilder
         {
             DataSource = @"(localdb)\MSSQLLocalDB",
-            InitialCatalog = "MyHRDB",
+            InitialCatalog = "myhr",
             IntegratedSecurity = true,
             TrustServerCertificate = true
         }.ConnectionString;
