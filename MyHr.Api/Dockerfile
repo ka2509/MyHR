@@ -5,6 +5,7 @@ WORKDIR /src
 # Copy project files first for layer caching
 COPY MyHr.Api/MyHr.Api.csproj MyHr.Api/
 COPY MyHr.Service/MyHr.Service.csproj MyHr.Service/
+COPY MyHr.Data/MyHr.Data.csproj MyHr.Data/
 
 # Restore dependencies
 RUN dotnet restore MyHr.Api/MyHr.Api.csproj
