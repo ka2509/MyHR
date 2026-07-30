@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="MyHr.Api/MyHr.Api.csproj" />
+  <Project Path="MyHr.Data/MyHr.Data.csproj" />
+  <Project Path="MyHr.DataImporter/MyHr.DataImporter.csproj" Id="3ed3047a-b94b-4a69-afae-e53b20a64a5b" />
+  <Project Path="MyHr.Service/MyHr.Service.csproj" />
+</Solution>

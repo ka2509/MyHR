@@ -1,0 +1,11 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "MyHr.Api",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/MyHr.Api/MyHr.Api/MyHr.Api.csproj"
+        }
+    ]
+}
