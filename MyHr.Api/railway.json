@@ -2,10 +2,10 @@
   "$schema": "https://railway.com/railway.schema.json",
   "build": {
     "builder": "NIXPACKS",
-    "buildCommand": "dotnet publish MyHr.Api/MyHr.Api.csproj -c Release -o out"
+    "buildCommand": "dotnet publish MyHr.Api/MyHr.Api.csproj -c Release -o /app/out"
   },
   "deploy": {
-    "startCommand": "dotnet out/MyHr.Api.dll",
+    "startCommand": "dotnet /app/out/MyHr.Api.dll",
     "healthcheckPath": "/swagger"
   }
 }
