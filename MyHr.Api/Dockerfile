@@ -13,7 +13,7 @@ RUN dotnet restore MyHr.Api/MyHr.Api.csproj
 COPY . .
 
 # Publish
-RUN dotnet publish MyHr.Api/MyHr.Api.csproj -c Release -o /app/out --no-restore
+RUN dotnet publish MyHr.Api/MyHr.Api.csproj -c Release -o /app/out
 
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
