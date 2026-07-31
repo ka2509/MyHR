@@ -371,7 +371,7 @@ function EmployeeList() {
             </div>
           )}
         </div>
-      </main>
+      </div>
 
       {/* Action Dropdown Menu */}
       {openMenuId && (() => {
