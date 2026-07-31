@@ -20,8 +20,6 @@ function EmployeeList() {
   const [menuPos, setMenuPos] = useState({ top: 0, right: 0 });
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-
   useEffect(() => {
     if (!localStorage.getItem('user')) {
       navigate('/login');
@@ -90,11 +88,6 @@ function EmployeeList() {
   const handleTabChange = (orgId) => {
     setActiveTab(orgId);
     loadSubOrganizations(orgId);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    navigate('/login');
   };
 
   const formatDate = (dateString) => {
@@ -186,16 +179,7 @@ function EmployeeList() {
   }
 
   return (
-    <div className="employee-list-container">
-      <header className="header">
-        <div className="header-left">
-          <h1>MyHR - Quản lý nhân sự</h1>
-        </div>
-        <div className="header-right">
-          <span className="user-name">Xin chào, {user.fullName}</span>
-          <button onClick={handleLogout} className="logout-btn">Đăng xuất</button>
-        </div>
-      </header>
+    <div className="employee-list-page">
 
       <main className="main-content">
         <div className="toolbar">
