@@ -385,8 +385,34 @@
 
 .employee-table th:nth-child(11),
 .employee-table td:nth-child(11) {
-  width: 12%;
+  width: 10%;
   text-align: right;
+}
+
+.employee-table th:nth-child(12),
+.employee-table td:nth-child(12) {
+  width: 5%;
+  text-align: center;
+}
+
+.action-cell {
+  text-align: center;
+}
+
+.btn-delete {
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid #e53e3e;
+  color: #e53e3e;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btn-delete:hover {
+  background: #e53e3e;
+  color: white;
 }
 
 .stt-cell {

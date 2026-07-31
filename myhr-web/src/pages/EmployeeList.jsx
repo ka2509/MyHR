@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getMainOrganizations, getSubOrganizations, getEmployeesByOrganization } from '../api/employeeApi';
+import { getMainOrganizations, getSubOrganizations, getEmployeesByOrganization, deleteEmployee } from '../api/employeeApi';
 import './EmployeeList.css';
 
 function EmployeeList() {
@@ -127,6 +127,17 @@ function EmployeeList() {
     setSelectedEmployee(null);
   };
 
+  const handleDelete = async (emp) => {
+    if (!window.confirm(`Bạn có chắc muốn xoá nhân viên "${emp.fullName}" không?\nHành động này không thể hoàn tác.`)) return;
+    try {
+      await deleteEmployee(emp.id);
+      setEmployees(prev => prev.filter(e => e.id !== emp.id));
+    } catch (err) {
+      alert('Xoá nhân viên thất bại. Vui lòng thử lại.');
+      console.error(err);
+    }
+  };
+
   const formatCurrency = (amount) => {
     if (!amount) return '0';
     return new Intl.NumberFormat('vi-VN').format(amount);
@@ -243,6 +254,7 @@ function EmployeeList() {
                     <th>Trình độ</th>
                     <th title="Bậc lương">Bậc</th>
                     <th>Tổng lương</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -265,6 +277,13 @@ function EmployeeList() {
                       >
                         <span className="salary-amount">{formatCurrency(emp.totalSalary)}</span>
                         <span className="salary-hint">VNĐ</span>
+                      </td>
+                      <td className="action-cell">
+                        <button
+                          className="btn-delete"
+                          onClick={() => handleDelete(emp)}
+                          title="Xoá nhân viên"
+                        >Xoá</button>
                       </td>
                     </tr>
                   ))}
