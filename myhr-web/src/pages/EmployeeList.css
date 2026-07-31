@@ -397,22 +397,61 @@
 
 .action-cell {
   text-align: center;
+  position: relative;
 }
 
-.btn-delete {
-  padding: 4px 10px;
+.btn-menu {
+  padding: 2px 8px;
   background: transparent;
-  border: 1px solid #e53e3e;
-  color: #e53e3e;
+  border: 1px solid #cbd5e0;
+  color: #4a5568;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.75rem;
-  transition: background 0.15s, color 0.15s;
+  font-size: 1rem;
+  line-height: 1;
+  transition: background 0.15s;
 }
 
-.btn-delete:hover {
-  background: #e53e3e;
-  color: white;
+.btn-menu:hover {
+  background: #e2e8f0;
+}
+
+.action-dropdown {
+  position: absolute;
+  right: 4px;
+  top: 100%;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  z-index: 100;
+  min-width: 120px;
+  overflow: hidden;
+}
+
+.action-item {
+  display: block;
+  width: 100%;
+  padding: 8px 14px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #2d3748;
+  transition: background 0.12s;
+}
+
+.action-item:hover {
+  background: #f7fafc;
+}
+
+.action-item--delete {
+  color: #e53e3e;
+}
+
+.action-item--delete:hover {
+  background: #fff5f5;
 }
 
 .stt-cell {

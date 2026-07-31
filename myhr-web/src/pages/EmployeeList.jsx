@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMainOrganizations, getSubOrganizations, getEmployeesByOrganization, deleteEmployee } from '../api/employeeApi';
 import './EmployeeList.css';
@@ -16,6 +16,8 @@ function EmployeeList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showSalaryModal, setShowSalaryModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [openMenuId, setOpenMenuId] = useState(null);
+  const menuRef = useRef(null);
   const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -27,6 +29,16 @@ function EmployeeList() {
     }
     fetchMainOrganizations();
   }, [navigate]);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpenMenuId(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const fetchMainOrganizations = async () => {
     try {
@@ -128,6 +140,7 @@ function EmployeeList() {
   };
 
   const handleDelete = async (emp) => {
+    setOpenMenuId(null);
     if (!window.confirm(`Bạn có chắc muốn xoá nhân viên "${emp.fullName}" không?\nHành động này không thể hoàn tác.`)) return;
     try {
       await deleteEmployee(emp.id);
@@ -278,12 +291,17 @@ function EmployeeList() {
                         <span className="salary-amount">{formatCurrency(emp.totalSalary)}</span>
                         <span className="salary-hint">VNĐ</span>
                       </td>
-                      <td className="action-cell">
+                      <td className="action-cell" ref={openMenuId === emp.id ? menuRef : null}>
                         <button
-                          className="btn-delete"
-                          onClick={() => handleDelete(emp)}
-                          title="Xoá nhân viên"
-                        >Xoá</button>
+                          className="btn-menu"
+                          onClick={() => setOpenMenuId(openMenuId === emp.id ? null : emp.id)}
+                          title="Thao tác"
+                        >⋮</button>
+                        {openMenuId === emp.id && (
+                          <div className="action-dropdown">
+                            <button className="action-item action-item--delete" onClick={() => handleDelete(emp)}>Xoá</button>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ))}
