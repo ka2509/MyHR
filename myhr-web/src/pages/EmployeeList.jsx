@@ -304,7 +304,6 @@ function EmployeeList() {
                 )}
               </div>
             </div>
-          </div>
 
           {loadingEmployees ? (
             <div className="loading-employees">Đang tải nhân viên...</div>
