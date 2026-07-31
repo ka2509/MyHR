@@ -231,7 +231,8 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 0.8rem;
-  table-layout: fixed;
+  table-layout: auto;
+  min-width: 1200px;
 }
 
 .employee-table th {
