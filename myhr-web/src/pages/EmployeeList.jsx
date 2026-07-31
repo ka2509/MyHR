@@ -18,6 +18,23 @@ function EmployeeList() {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);
   const [menuPos, setMenuPos] = useState({ top: 0, right: 0 });
+  const [showColumnFilter, setShowColumnFilter] = useState(false);
+  const [visibleColumns, setVisibleColumns] = useState(() => {
+    const saved = localStorage.getItem('visibleColumns');
+    return saved ? JSON.parse(saved) : {
+      stt: true,
+      name: true,
+      gender: true,
+      socialInsurance: true,
+      dob: true,
+      identityCard: true,
+      insuranceDate: true,
+      position: true,
+      profession: true,
+      grade: true,
+      salary: true,
+    };
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,6 +49,9 @@ function EmployeeList() {
     const handleClickOutside = (e) => {
       if (!e.target.closest('.btn-menu') && !e.target.closest('.action-dropdown')) {
         setOpenMenuId(null);
+      }
+      if (!e.target.closest('.column-filter-btn') && !e.target.closest('.column-filter-dropdown')) {
+        setShowColumnFilter(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -162,6 +182,26 @@ function EmployeeList() {
     return new Intl.NumberFormat('vi-VN').format(amount);
   };
 
+  const handleColumnToggle = (column) => {
+    const updated = { ...visibleColumns, [column]: !visibleColumns[column] };
+    setVisibleColumns(updated);
+    localStorage.setItem('visibleColumns', JSON.stringify(updated));
+  };
+
+  const columnLabels = {
+    stt: 'STT',
+    name: 'Họ và tên',
+    gender: 'Giới tính (GT)',
+    socialInsurance: 'Mã BHXH',
+    dob: 'Ngày sinh',
+    identityCard: 'CCCD',
+    insuranceDate: 'Thời gian BHXH',
+    position: 'Chuyên môn',
+    profession: 'Trình độ',
+    grade: 'Bậc',
+    salary: 'Tổng lương',
+  };
+
   const getAllowanceLabel = (employee) => {
     if (!employee.allowanceName) return 'Không có';
     
@@ -180,8 +220,6 @@ function EmployeeList() {
 
   return (
     <div className="employee-list-page">
-
-      <main className="main-content">
         <div className="toolbar">
           <h2>Danh sách nhân viên</h2>
           <button onClick={() => navigate('/employees/add')} className="btn-add-employee">
@@ -233,13 +271,39 @@ function EmployeeList() {
                 </select>
               )}
             </div>
-            <input
-              type="text"
-              placeholder="Tìm kiếm theo tên, mã BHXH, CCCD..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
-            />
+            <div className="search-and-filter">
+              <input
+                type="text"
+                placeholder="Tìm kiếm theo tên, mã BHXH, CCCD..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+              <div className="column-filter-container">
+                <button 
+                  className="column-filter-btn" 
+                  onClick={() => setShowColumnFilter(!showColumnFilter)}
+                  title="Chọn cột hiển thị"
+                >
+                  ⚙️ Cột
+                </button>
+                {showColumnFilter && (
+                  <div className="column-filter-dropdown">
+                    <div className="column-filter-header">Hiển thị cột</div>
+                    {Object.entries(columnLabels).map(([key, label]) => (
+                      <label key={key} className="column-filter-item">
+                        <input
+                          type="checkbox"
+                          checked={visibleColumns[key]}
+                          onChange={() => handleColumnToggle(key)}
+                        />
+                        <span>{label}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           {loadingEmployees ? (
@@ -253,41 +317,43 @@ function EmployeeList() {
               <table className="employee-table">
                 <thead>
                   <tr>
-                    <th>STT</th>
-                    <th>Họ và tên</th>
-                    <th title="Giới tính">GT</th>
-                    <th title="Mã số BHXH">Mã BHXH</th>
-                    <th>Ngày sinh</th>
-                    <th title="Căn cước công dân">CCCD</th>
-                    <th title="Thời gian đóng BHXH">TG BHXH</th>
-                    <th title="Chuyên môn nghiệp vụ">Chuyên môn</th>
-                    <th>Trình độ</th>
-                    <th title="Bậc lương">Bậc</th>
-                    <th>Tổng lương</th>
+                    {visibleColumns.stt && <th>STT</th>}
+                    {visibleColumns.name && <th>Họ và tên</th>}
+                    {visibleColumns.gender && <th title="Giới tính">GT</th>}
+                    {visibleColumns.socialInsurance && <th title="Mã số BHXH">Mã BHXH</th>}
+                    {visibleColumns.dob && <th>Ngày sinh</th>}
+                    {visibleColumns.identityCard && <th title="Căn cước công dân">CCCD</th>}
+                    {visibleColumns.insuranceDate && <th title="Thời gian đóng BHXH">TG BHXH</th>}
+                    {visibleColumns.position && <th title="Chuyên môn nghiệp vụ">Chuyên môn</th>}
+                    {visibleColumns.profession && <th>Trình độ</th>}
+                    {visibleColumns.grade && <th title="Bậc lương">Bậc</th>}
+                    {visibleColumns.salary && <th>Tổng lương</th>}
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
                   {sortedEmployees.map((emp, index) => (
                     <tr key={emp.id}>
-                      <td className="stt-cell">{index + 1}</td>
-                      <td className="name-cell">{emp.fullName}</td>
-                      <td className="gender-cell">{emp.sex === 0 ? 'Nữ' : 'Nam'}</td>
-                      <td>{emp.socialInsurance}</td>
-                      <td>{formatDate(emp.dob)}</td>
-                      <td>{emp.identityCardNumber}</td>
-                      <td>{formatMonthYear(emp.socialInsuranceContributionDate)}</td>
-                      <td className="position-cell">{emp.positionName}</td>
-                      <td className="profession-cell">{emp.professionName}</td>
-                      <td className="grade-cell">{emp.currentSalaryGrade}</td>
-                      <td 
-                        className="salary-cell clickable"
-                        onClick={() => handleShowSalaryDetails(emp)}
-                        title="Nhấn để xem chi tiết lương"
-                      >
-                        <span className="salary-amount">{formatCurrency(emp.totalSalary)}</span>
-                        <span className="salary-hint">VNĐ</span>
-                      </td>
+                      {visibleColumns.stt && <td className="stt-cell">{index + 1}</td>}
+                      {visibleColumns.name && <td className="name-cell">{emp.fullName}</td>}
+                      {visibleColumns.gender && <td className="gender-cell">{emp.sex === 0 ? 'Nữ' : 'Nam'}</td>}
+                      {visibleColumns.socialInsurance && <td>{emp.socialInsurance}</td>}
+                      {visibleColumns.dob && <td>{formatDate(emp.dob)}</td>}
+                      {visibleColumns.identityCard && <td>{emp.identityCardNumber}</td>}
+                      {visibleColumns.insuranceDate && <td>{formatMonthYear(emp.socialInsuranceContributionDate)}</td>}
+                      {visibleColumns.position && <td className="position-cell">{emp.positionName}</td>}
+                      {visibleColumns.profession && <td className="profession-cell">{emp.professionName}</td>}
+                      {visibleColumns.grade && <td className="grade-cell">{emp.currentSalaryGrade}</td>}
+                      {visibleColumns.salary && (
+                        <td 
+                          className="salary-cell clickable"
+                          onClick={() => handleShowSalaryDetails(emp)}
+                          title="Nhấn để xem chi tiết lương"
+                        >
+                          <span className="salary-amount">{formatCurrency(emp.totalSalary)}</span>
+                          <span className="salary-hint">VNĐ</span>
+                        </td>
+                      )}
                       <td className="action-cell">
                         <button
                           className="btn-menu"
