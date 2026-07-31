@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMainOrganizations, getSubOrganizations, getEmployeesByOrganization, deleteEmployee } from '../api/employeeApi';
 import './EmployeeList.css';
@@ -17,7 +17,7 @@ function EmployeeList() {
   const [showSalaryModal, setShowSalaryModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);
-  const menuRef = useRef(null);
+  const [menuPos, setMenuPos] = useState({ top: 0, right: 0 });
   const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -32,7 +32,7 @@ function EmployeeList() {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
+      if (!e.target.closest('.btn-menu') && !e.target.closest('.action-dropdown')) {
         setOpenMenuId(null);
       }
     };
@@ -137,6 +137,19 @@ function EmployeeList() {
   const handleCloseSalaryModal = () => {
     setShowSalaryModal(false);
     setSelectedEmployee(null);
+  };
+
+  const handleMenuToggle = (e, empId) => {
+    if (openMenuId === empId) {
+      setOpenMenuId(null);
+      return;
+    }
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMenuPos({
+      top: rect.bottom + 4,
+      right: window.innerWidth - rect.right,
+    });
+    setOpenMenuId(empId);
   };
 
   const handleDelete = async (emp) => {
@@ -291,17 +304,12 @@ function EmployeeList() {
                         <span className="salary-amount">{formatCurrency(emp.totalSalary)}</span>
                         <span className="salary-hint">VNĐ</span>
                       </td>
-                      <td className="action-cell" ref={openMenuId === emp.id ? menuRef : null}>
+                      <td className="action-cell">
                         <button
                           className="btn-menu"
-                          onClick={() => setOpenMenuId(openMenuId === emp.id ? null : emp.id)}
+                          onClick={(e) => handleMenuToggle(e, emp.id)}
                           title="Thao tác"
                         >⋮</button>
-                        {openMenuId === emp.id && (
-                          <div className="action-dropdown">
-                            <button className="action-item action-item--delete" onClick={() => handleDelete(emp)}>Xoá</button>
-                          </div>
-                        )}
                       </td>
                     </tr>
                   ))}
@@ -314,6 +322,16 @@ function EmployeeList() {
           )}
         </div>
       </main>
+
+      {/* Action Dropdown Menu */}
+      {openMenuId && (() => {
+        const emp = sortedEmployees.find(e => e.id === openMenuId);
+        return emp ? (
+          <div className="action-dropdown" style={{ top: menuPos.top, right: menuPos.right }}>
+            <button className="action-item action-item--delete" onClick={() => handleDelete(emp)}>Xoá</button>
+          </div>
+        ) : null;
+      })()}
 
       {/* Salary Details Modal */}
       {showSalaryModal && selectedEmployee && (
