@@ -245,6 +245,39 @@ function EmployeeList() {
         {/* Employees Table */}
         <div className="employees-section">
           <div className="employees-header">
+            <div className="search-and-filter">
+              <input
+                type="text"
+                placeholder="Tìm kiếm theo tên, mã BHXH, CCCD..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+              <div className="column-filter-container">
+                <button 
+                  className="column-filter-btn" 
+                  onClick={() => setShowColumnFilter(!showColumnFilter)}
+                  title="Chọn cột hiển thị"
+                >
+                  Lọc
+                </button>
+                {showColumnFilter && (
+                  <div className="column-filter-dropdown">
+                    <div className="column-filter-header">Hiển thị cột</div>
+                    {Object.entries(columnLabels).map(([key, label]) => (
+                      <label key={key} className="column-filter-item">
+                        <input
+                          type="checkbox"
+                          checked={visibleColumns[key]}
+                          onChange={() => handleColumnToggle(key)}
+                        />
+                        <span>{label}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
             <div className="sub-org-selector">
               <label htmlFor="subOrg">Phòng ban/Cụm/Tổ:</label>
               {loadingSubOrgs ? (
@@ -270,39 +303,6 @@ function EmployeeList() {
                   ))}
                 </select>
               )}
-            </div>
-            <div className="search-and-filter">
-              <input
-                type="text"
-                placeholder="Tìm kiếm theo tên, mã BHXH, CCCD..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="search-input"
-              />
-              <div className="column-filter-container">
-                <button 
-                  className="column-filter-btn" 
-                  onClick={() => setShowColumnFilter(!showColumnFilter)}
-                  title="Chọn cột hiển thị"
-                >
-                  ⚙️ Cột
-                </button>
-                {showColumnFilter && (
-                  <div className="column-filter-dropdown">
-                    <div className="column-filter-header">Hiển thị cột</div>
-                    {Object.entries(columnLabels).map(([key, label]) => (
-                      <label key={key} className="column-filter-item">
-                        <input
-                          type="checkbox"
-                          checked={visibleColumns[key]}
-                          onChange={() => handleColumnToggle(key)}
-                        />
-                        <span>{label}</span>
-                      </label>
-                    ))}
-                  </div>
-                )}
-              </div>
             </div>
 
           {loadingEmployees ? (

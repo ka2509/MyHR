@@ -191,15 +191,21 @@
 
 .employees-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 16px;
   margin-bottom: 20px;
-  gap: 20px;
-  flex-wrap: wrap;
 }
 
-.employees-header .search-input {
-  width: 350px;
+.search-and-filter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.search-and-filter .search-input {
+  flex: 1;
+  width: auto;
 }
 
 .no-selection {
@@ -485,10 +491,19 @@
   .search-and-filter {
     flex-direction: column;
     width: 100%;
+    align-items: stretch;
   }
 
   .column-filter-btn {
     width: 100%;
+  }
+
+  .sub-org-selector {
+    flex-wrap: wrap;
+  }
+
+  .sub-org-select {
+    min-width: 100%;
   }
 
   .tabs-container {
