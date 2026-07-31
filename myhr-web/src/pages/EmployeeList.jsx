@@ -278,30 +278,37 @@ function EmployeeList() {
                 )}
               </div>
             </div>
-            <div className="sub-org-selector">
-              <label htmlFor="subOrg">Phòng ban/Cụm/Tổ:</label>
-              {loadingSubOrgs ? (
-                <div className="loading-select">Đang tải...</div>
-              ) : (
-                <select
-                  id="subOrg"
-                  value={selectedSubOrg?.id || ''}
-                  onChange={(e) => {
-                    const selected = subOrgs.find(s => s.id === e.target.value);
-                    if (selected) {
-                      loadEmployees(selected.id, selected.name);
-                    }
-                  }}
-                  className="sub-org-select"
-                  disabled={subOrgs.length === 0}
-                >
-                  <option value="">-- Chọn đơn vị --</option>
-                  {subOrgs.map(subOrg => (
-                    <option key={subOrg.id} value={subOrg.id}>
-                      {getOrgTypeName(subOrg.type)} - {subOrg.name}
-                    </option>
-                  ))}
-                </select>
+            <div className="sub-org-row">
+              <div className="sub-org-selector">
+                <label htmlFor="subOrg">Phòng ban/Cụm/Tổ:</label>
+                {loadingSubOrgs ? (
+                  <div className="loading-select">Đang tải...</div>
+                ) : (
+                  <select
+                    id="subOrg"
+                    value={selectedSubOrg?.id || ''}
+                    onChange={(e) => {
+                      const selected = subOrgs.find(s => s.id === e.target.value);
+                      if (selected) {
+                        loadEmployees(selected.id, selected.name);
+                      }
+                    }}
+                    className="sub-org-select"
+                    disabled={subOrgs.length === 0}
+                  >
+                    <option value="">-- Chọn đơn vị --</option>
+                    {subOrgs.map(subOrg => (
+                      <option key={subOrg.id} value={subOrg.id}>
+                        {getOrgTypeName(subOrg.type)} - {subOrg.name}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+              {selectedSubOrg && !loadingEmployees && filteredEmployees.length > 0 && (
+                <div className="employee-count-inline">
+                  {filteredEmployees.length} nhân viên
+                </div>
               )}
             </div>
 
@@ -364,9 +371,7 @@ function EmployeeList() {
                   ))}
                 </tbody>
               </table>
-              <div className="employee-count">
-                Tổng số: {filteredEmployees.length} nhân viên
-              </div>
+
             </div>
           )}
         </div>
