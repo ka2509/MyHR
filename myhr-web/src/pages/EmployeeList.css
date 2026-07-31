@@ -1,48 +1,4 @@
-.employee-list-container {
-  min-height: 100vh;
-  background: #f5f7fa;
-}
-
-.header {
-  background: #1a365d;
-  color: white;
-  padding: 16px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.header h1 {
-  margin: 0;
-  font-size: 1.4rem;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.user-name {
-  font-size: 0.9rem;
-}
-
-.logout-btn {
-  padding: 8px 16px;
-  background: transparent;
-  border: 1px solid white;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.logout-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.main-content {
+.employee-list-page {
   padding: 20px 16px;
   max-width: 1800px;
   margin: 0 auto;
